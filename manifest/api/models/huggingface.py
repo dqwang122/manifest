@@ -162,6 +162,7 @@ class GenerationPipeline:
             top_p=kwargs.get("top_p"),
             repetition_penalty=kwargs.get("repetition_penalty"),
             num_return_sequences=kwargs.get("num_return_sequences"),
+            do_sample=kwargs.get("do_sample"),
         )
         kwargs_to_pass = {k: v for k, v in kwargs_to_pass.items() if v is not None}
         output_dict = self.model.generate(  # type: ignore
@@ -309,6 +310,9 @@ class HuggingFaceModel(Model):
                 "GPTJBlock",
                 "GPTNeoXLayer",
                 "T5Block",
+                "LlamaDecoderLayer",
+                "MistralDecoderLayer",
+                "MixtralDecoderLayer",
             ],
             dtype=model.dtype,  # type: ignore
         )
@@ -326,7 +330,7 @@ class HuggingFaceModel(Model):
             except TypeError:
                 device_map["lm_head"] = "cpu"
         print("Device Map", device_map)
-        dispatch_model(model, device_map=device_map)
+        dispatch_model(model, device_map=device_map, skip_keys="past_key_values")
         return
 
 

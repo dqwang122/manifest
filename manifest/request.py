@@ -27,7 +27,7 @@ class Request(BaseModel):
     n: int = 1
 
     # Timeout
-    client_timeout: int = 60
+    client_timeout: int = 120
 
     # Run id used to repeat run with same parameters
     run_id: Optional[str] = None
@@ -69,6 +69,9 @@ class LMRequest(Request):
 
     # Max tokens for generation
     max_tokens: int = 100
+
+    # Max new tokens for generation
+    max_new_tokens: int = 20
 
     # Nucleus sampling taking top_p probability mass tokens
     top_p: float = 1.0
